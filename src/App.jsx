@@ -1,8 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  Terminal, Shield, Cpu, Search, Mail, Phone, Github, Linkedin,
+  Terminal, Shield, Cpu, Search, Mail,
   ChevronRight, Radar, Lock, Database, FileCode2, ExternalLink, MapPin
 } from "lucide-react";
+
+function GithubIcon({ size = 15 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 .5C5.73.5.98 5.24.98 11.5c0 4.94 3.19 9.13 7.62 10.6.56.1.76-.24.76-.54v-2.02c-3.1.67-3.76-1.31-3.76-1.31-.5-1.28-1.24-1.62-1.24-1.62-1.01-.7.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15 1 1.7 2.62 1.21 3.26.93.1-.72.39-1.21.7-1.49-2.47-.28-5.08-1.24-5.08-5.5 0-1.22.43-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.96 0 0 .94-.3 3.08 1.14a10.6 10.6 0 0 1 5.6 0c2.14-1.44 3.08-1.14 3.08-1.14.61 1.54.23 2.68.11 2.96.72.78 1.15 1.77 1.15 2.99 0 4.27-2.62 5.21-5.11 5.49.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.77.54A11.03 11.03 0 0 0 23 11.5C23 5.24 18.27.5 12 .5Z"/>
+    </svg>
+  );
+}
+
+function LinkedinIcon({ size = 15 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.03-1.85-3.03-1.86 0-2.15 1.45-2.15 2.94v5.66H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.12 20.45H3.56V9h3.56v11.45Z"/>
+    </svg>
+  );
+}
 
 /* ---------------------------------------------------------
    TOKENS
@@ -45,6 +61,7 @@ const projects = [
     tag: "FINAL YEAR PROJECT",
     title: "Veriscope",
     subtitle: "AI-powered research & verification platform",
+    demo: "https://veriscope.streamlit.app/",
     stack: ["Python", "Streamlit", "LangChain", "HuggingFace", "FAISS"],
     desc:
       "A document Q&A system built on RAG — retrieves context from PDFs and URLs, ranks it through a HuggingFace + FAISS vector pipeline, and answers through an LLM. Six tools live under one Streamlit interface: Document Q&A, Fake News Detector, Plagiarism Checker, AI Content Detector, Language Translator, and URL Trust Checker.",
@@ -105,7 +122,7 @@ const certifications = [
 --------------------------------------------------------- */
 function TerminalHero() {
   const lines = [
-    { cmd: "whoami", out: "Ruchitha_r —  BCA, St. Paul's College" },
+    { cmd: "whoami", out: "ruchitha_r — final-year BCA, St. Paul's College" },
     { cmd: "scan --target=career --mode=deep", out: "2 domains detected: AI/ML systems, cybersecurity" },
     { cmd: "status", out: "open to full-time roles · Bengaluru" },
   ];
@@ -344,6 +361,9 @@ export default function Portfolio() {
           max-width: 1280px; margin: 0 auto;
         }
         @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+        .hero-intro {
+          font-size: 13.5px; color: var(--muted); margin-bottom: 14px; letter-spacing: 0.01em;
+        }
         .hero-eyebrow {
           font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--scan);
           letter-spacing: 0.12em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 18px;
@@ -493,6 +513,7 @@ export default function Portfolio() {
       {/* HERO */}
       <div id="home" className="hero">
         <div>
+          <div className="hero-intro mono">Hi, I'm Ruchitha — open to work in AI/ML, testing, and cybersecurity.</div>
           <div className="hero-eyebrow">
             <Radar size={14} /> scanning targets: AI/ML · cybersecurity
           </div>
@@ -509,6 +530,9 @@ export default function Portfolio() {
             <button className="btn btn-primary" onClick={() => scrollTo("projects")}>
               View projects <ChevronRight size={16} />
             </button>
+            <a className="btn btn-ghost" href="/Ruchitha_Resume.pdf" target="_blank" rel="noreferrer" download>
+              <FileCode2 size={15} /> Download resume
+            </a>
             <button className="btn btn-ghost" onClick={() => scrollTo("contact")}>
               Get in touch
             </button>
@@ -578,7 +602,20 @@ export default function Portfolio() {
       <Section id="projects" eyebrow="03 · case files" title="Projects worth opening">
         {projects.map((p) => (
           <div className="project-card" key={p.id}>
-            <span className="project-tag">{p.tag}</span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+              <span className="project-tag">{p.tag}</span>
+              {p.demo && (
+                <a
+                  href={p.demo}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="stack-chip"
+                  style={{ display: "flex", alignItems: "center", gap: 6, textDecoration: "none", whiteSpace: "nowrap" }}
+                >
+                  <ExternalLink size={12} /> Live demo
+                </a>
+              )}
+            </div>
             <h3>{p.title}</h3>
             <div className="subtitle">{p.subtitle}</div>
             <p className="desc">{p.desc}</p>
@@ -640,17 +677,17 @@ export default function Portfolio() {
           building at the intersection of both. Reach out — I reply fast.
         </p>
         <div className="contact-links">
+          <a className="contact-chip" href="/Ruchitha_Resume.pdf" target="_blank" rel="noreferrer" download>
+            <FileCode2 size={15} /> Download resume
+          </a>
           <a className="contact-chip" href="mailto:ruchitharuc@gmail.com">
             <Mail size={15} /> ruchitharuc@gmail.com
           </a>
-          <a className="contact-chip" href="tel:+919480957145">
-            <Phone size={15} /> +91 94809 57145
-          </a>
           <a className="contact-chip" href="https://www.linkedin.com/in/ruchitharr" target="_blank" rel="noreferrer">
-            <Linkedin size={15} /> linkedin.com/in/ruchitharr
+            <LinkedinIcon size={15} /> linkedin.com/in/ruchitharr
           </a>
           <a className="contact-chip" href="https://github.com/rruchitha460-sys" target="_blank" rel="noreferrer">
-            <Github size={15} /> github.com/rruchitha460-sys
+            <GithubIcon size={15} /> github.com/rruchitha460-sys
           </a>
           <span className="contact-chip" style={{ cursor: "default" }}>
             <MapPin size={15} /> Bengaluru, KA
