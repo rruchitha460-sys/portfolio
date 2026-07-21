@@ -57,7 +57,7 @@ const skillGroups = [
 
 const projects = [
   {
-    id: "veriscope",
+    id: "Veriscope",
     tag: "FINAL YEAR PROJECT",
     title: "Veriscope",
     subtitle: "AI-powered research & verification platform",
@@ -122,8 +122,8 @@ const certifications = [
 --------------------------------------------------------- */
 function TerminalHero() {
   const lines = [
-    { cmd: "whoami", out: "ruchitha_r — final-year BCA, St. Paul's College" },
-    { cmd: "scan --target=career --mode=deep", out: "2 domains detected: AI/ML systems, cybersecurity" },
+    { cmd: "I'm", out: "Ruchitha R BCA Graduate, St. Paul's College" },
+    { cmd: "Field", out: "AI/ML systems, cybersecurity, Testing " },
     { cmd: "status", out: "open to full-time roles · Bengaluru" },
   ];
   const [lineIdx, setLineIdx] = useState(0);
@@ -243,7 +243,7 @@ function RadarMark() {
 --------------------------------------------------------- */
 function Section({ id, eyebrow, title, children, className = "" }) {
   return (
-    <section id={id} className={`section ${className}`}>
+    <section id={id} className={`section reveal ${className}`}>
       <div className="section-head">
         <span className="eyebrow">
           <span className="eyebrow-dot" />
@@ -257,10 +257,10 @@ function Section({ id, eyebrow, title, children, className = "" }) {
 }
 
 export default function Portfolio() {
-  const [active, setActive] = useState("home");
+  const [active, setActive] = useState("Home");
 
   useEffect(() => {
-    const ids = ["home", "about", "skills", "projects", "experience", "certifications", "contact"];
+    const ids = ["Home", "About", "Skills", "Projects", "Experience", "Certifications", "Contact"];
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -276,14 +276,31 @@ export default function Portfolio() {
     return () => obs.disconnect();
   }, []);
 
+  useEffect(() => {
+    const revealEls = document.querySelectorAll(".reveal");
+    const revealObs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("reveal-visible");
+            revealObs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -60px 0px" }
+    );
+    revealEls.forEach((el) => revealObs.observe(el));
+    return () => revealObs.disconnect();
+  }, []);
+
   const nav = [
-    { id: "home", label: "home" },
-    { id: "about", label: "about" },
-    { id: "skills", label: "skills" },
-    { id: "projects", label: "projects" },
-    { id: "experience", label: "experience" },
-    { id: "certifications", label: "certs" },
-    { id: "contact", label: "contact" },
+    { id: "Home", label: "Home" },
+    { id: "About", label: "About" },
+    { id: "Skills", label: "Skills" },
+    { id: "Projects", label: "Projects" },
+    { id: "Experience", label: "Experience" },
+    { id: "Certifications", label: "Certs" },
+    { id: "Contact", label: "Contact" },
   ];
 
   const scrollTo = (id) => {
@@ -327,6 +344,15 @@ export default function Portfolio() {
         a { color: inherit; }
         .mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
 
+        .reveal {
+          opacity: 0; transform: translateY(28px);
+          transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal-visible { opacity: 1; transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+          .reveal { opacity: 1; transform: none; transition: none; }
+        }
+
         /* NAV */
         .navbar {
           position: sticky; top: 0; z-index: 20;
@@ -361,6 +387,55 @@ export default function Portfolio() {
           max-width: 1280px; margin: 0 auto;
         }
         @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+        .hero-v2 { align-items: center; }
+        .pill-badge {
+          display: inline-flex; align-items: center; gap: 8px;
+          border: 1px solid rgba(79,227,193,0.4); border-radius: 999px;
+          padding: 7px 16px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
+          letter-spacing: 0.1em; text-transform: uppercase; color: var(--scan);
+          margin-bottom: 22px; background: rgba(79,227,193,0.06);
+        }
+        .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--scan); box-shadow: 0 0 6px var(--scan); }
+        .name-block { display: inline-block; }
+        .name-block .role-line { text-align: center; justify-content: center; }
+        .big-name {
+          font-size: clamp(38px, 7vw, 74px); line-height: 1.05; font-weight: 800;
+          letter-spacing: -0.02em; margin: 0 0 22px; text-transform: uppercase;
+          white-space: nowrap;
+        }
+        @media (max-width: 500px) { .big-name { white-space: normal; } }
+        .big-name .accent { color: var(--scan); }
+        .role-line {
+          display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace;
+          font-size: 14px; letter-spacing: 0.08em; color: var(--text); margin: 0 auto 20px;
+          width: fit-content;
+        }
+        .role-arrow { color: var(--scan); }
+        .avatar-wrap { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .avatar-ring {
+          width: min(260px, 70%); aspect-ratio: 1; border-radius: 50%;
+          border: 3px solid var(--scan); display: flex; align-items: center; justify-content: center;
+          position: relative; box-shadow: 0 0 40px rgba(79,227,193,0.25), inset 0 0 30px rgba(79,227,193,0.1);
+          background: radial-gradient(circle at 50% 40%, rgba(79,227,193,0.12), transparent 70%);
+        }
+        .avatar-ring::after {
+          content: ""; position: absolute; inset: -10px; border-radius: 50%;
+          border: 1px dashed rgba(79,227,193,0.35); animation: spin 18s linear infinite;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) { .avatar-ring::after { animation: none; } }
+        .avatar-initials {
+          font-family: 'JetBrains Mono', monospace; font-size: clamp(40px, 6vw, 64px);
+          font-weight: 700; color: var(--scan); letter-spacing: 0.02em;
+        }
+        .avatar-img {
+          width: calc(100% - 16px); height: calc(100% - 16px); border-radius: 50%;
+          object-fit: cover; position: relative; z-index: 1;
+        }
+        .avatar-caption { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .avatar-name { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); letter-spacing: 0.08em; }
+        .avatar-role { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+
         .hero-intro {
           font-size: 13.5px; color: var(--muted); margin-bottom: 14px; letter-spacing: 0.01em;
         }
@@ -456,6 +531,14 @@ export default function Portfolio() {
         .project-points svg { flex-shrink: 0; margin-top: 2px; color: var(--scan); }
         .stack-row { display: flex; gap: 8px; flex-wrap: wrap; }
         .stack-chip { font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--scan); border: 1px solid rgba(79,227,193,0.3); background: rgba(79,227,193,0.06); border-radius: 4px; padding: 3px 9px; }
+        .demo-btn {
+          display: inline-flex; align-items: center; gap: 8px;
+          font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700;
+          color: #06110D; background: var(--scan); border-radius: 6px;
+          padding: 10px 20px; text-decoration: none; white-space: nowrap;
+          transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .demo-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,227,193,0.3); }
 
         /* EXPERIENCE — case-file timeline */
         .exp-item { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding: 24px 0; border-top: 1px solid var(--line); }
@@ -495,7 +578,7 @@ export default function Portfolio() {
       <nav className="navbar">
         <div className="brand">
           <span className="brand-dot" />
-          ruchitha.r
+          RUCHITHA R
         </div>
         <div className="navlinks">
           {nav.map((n) => (
@@ -511,20 +594,22 @@ export default function Portfolio() {
       </nav>
 
       {/* HERO */}
-      <div id="home" className="hero">
+      <div id="home" className="hero hero-v2 reveal">
         <div>
-          <div className="hero-intro mono">Hi, I'm Ruchitha — open to work in AI/ML, testing, and cybersecurity.</div>
-          <div className="hero-eyebrow">
-            <Radar size={14} /> scanning targets: AI/ML · cybersecurity
+          <span className="pill-badge">
+            <span className="pill-dot" /> open to opportunities
+          </span>
+          <div className="name-block">
+            <h1 className="big-name">
+              RUCHITHA R<span className="accent">.</span>
+            </h1>
+            <div className="role-line">
+              <ChevronRight size={16} className="role-arrow" /> AI/ML &nbsp;/&nbsp; CYBERSECURITY
+            </div>
           </div>
-          <h1>
-            Building systems that <span className="accent">retrieve smart</span> and{" "}
-            <span className="accent">defend well</span>.
-          </h1>
           <p className="lede">
-            Final-year BCA student at St. Paul's College, Bengaluru. I build
-            RAG-based AI tools and test systems for the gaps attackers look for —
-            two disciplines that, done right, ask the same question: what can go wrong here?
+            I build RAG-based AI tools and test systems for the gaps attackers
+            look for — BCA Graduate student.
           </p>
           <div className="hero-ctas">
             <button className="btn btn-primary" onClick={() => scrollTo("projects")}>
@@ -538,12 +623,18 @@ export default function Portfolio() {
             </button>
           </div>
         </div>
-        <div className="hero-visual">
-          <RadarMark />
+        <div className="avatar-wrap">
+          <div className="avatar-ring">
+            <img src="/avatar.png" alt="Ruchitha R" className="avatar-img" />
+          </div>
+          <div className="avatar-caption">
+            <span className="avatar-name">RUCHITHA R</span>
+            <span className="avatar-role">BCA · AI/ML &amp; CYBERSECURITY</span>
+          </div>
         </div>
       </div>
 
-      <div className="section" style={{ paddingTop: 0 }}>
+      <div className="section reveal" style={{ paddingTop: 0 }}>
         <TerminalHero />
       </div>
 
@@ -552,7 +643,7 @@ export default function Portfolio() {
         <div className="about-grid">
           <div className="about-text">
             <p>
-              I'm <strong>Ruchitha</strong> — a final-year BCA student who ended up
+              I'm <strong>Ruchitha</strong> — a BCA graduate student who ended up
               splitting time between two fields that don't usually share a
               portfolio: <strong>AI/ML development</strong> and{" "}
               <strong>cybersecurity</strong>.
@@ -601,18 +692,17 @@ export default function Portfolio() {
       {/* PROJECTS */}
       <Section id="projects" eyebrow="03 · case files" title="Projects worth opening">
         {projects.map((p) => (
-          <div className="project-card" key={p.id}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+          <div className="project-card reveal" key={p.id}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <span className="project-tag">{p.tag}</span>
               {p.demo && (
                 <a
                   href={p.demo}
                   target="_blank"
                   rel="noreferrer"
-                  className="stack-chip"
-                  style={{ display: "flex", alignItems: "center", gap: 6, textDecoration: "none", whiteSpace: "nowrap" }}
+                  className="demo-btn"
                 >
-                  <ExternalLink size={12} /> Live demo
+                  <ExternalLink size={16} /> View Live Demo
                 </a>
               )}
             </div>
@@ -639,7 +729,7 @@ export default function Portfolio() {
       {/* EXPERIENCE */}
       <Section id="experience" eyebrow="04 · timeline" title="Where I've worked">
         {experience.map((e) => (
-          <div className="exp-item" key={e.role}>
+          <div className="exp-item reveal" key={e.role}>
             <div className="exp-date mono">{e.date}</div>
             <div>
               <h3 className="exp-role">{e.role}</h3>
