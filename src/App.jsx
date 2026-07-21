@@ -1,0 +1,666 @@
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Terminal, Shield, Cpu, Search, Mail, Phone, Github, Linkedin,
+  ChevronRight, Radar, Lock, Database, FileCode2, ExternalLink, MapPin
+} from "lucide-react";
+
+/* ---------------------------------------------------------
+   TOKENS
+   bg-ink   #0B0F14   deep navy-black
+   surface  #121820   panel
+   line     #1F2A35   hairline borders
+   text     #E7EDF2   primary text
+   muted    #7C8AA0   secondary text
+   scan     #4FE3C1   cyan-teal — "scan / verified" accent
+   pulse    #8A7CFF   violet — "AI / model" accent
+   alert    #FF6B5E   warm red — used sparingly for emphasis dots
+--------------------------------------------------------- */
+
+const skillGroups = [
+  {
+    label: "Languages",
+    icon: FileCode2,
+    items: ["Python", "Java", "SQL", "HTML/CSS"],
+  },
+  {
+    label: "AI / ML Stack",
+    icon: Cpu,
+    items: ["LangChain", "HuggingFace", "FAISS", "Streamlit", "RAG Pipelines"],
+  },
+  {
+    label: "Security & Testing",
+    icon: Shield,
+    items: ["Nmap", "Wireshark", "Metasploit", "Kali Linux", "Selenium", "Gatling"],
+  },
+  {
+    label: "Tools & Platforms",
+    icon: Database,
+    items: ["Postman", "GitHub", "VS Code", "Power BI", "Excel"],
+  },
+];
+
+const projects = [
+  {
+    id: "veriscope",
+    tag: "FINAL YEAR PROJECT",
+    title: "Veriscope",
+    subtitle: "AI-powered research & verification platform",
+    stack: ["Python", "Streamlit", "LangChain", "HuggingFace", "FAISS"],
+    desc:
+      "A document Q&A system built on RAG — retrieves context from PDFs and URLs, ranks it through a HuggingFace + FAISS vector pipeline, and answers through an LLM. Six tools live under one Streamlit interface: Document Q&A, Fake News Detector, Plagiarism Checker, AI Content Detector, Language Translator, and URL Trust Checker.",
+    points: [
+      "Tuned chunking strategy to improve retrieval accuracy",
+      "Built the embedding + vector search pipeline from scratch",
+      "Designed the interface for real-time interaction",
+    ],
+  },
+  {
+    id: "spotify",
+    tag: "DATA ANALYTICS",
+    title: "Spotify Streaming Dashboard",
+    subtitle: "Interactive Power BI dashboard",
+    stack: ["Power BI", "Power Query"],
+    desc:
+      "Dashboard analyzing songs, artists, and streaming trends, with dynamic filters and slicers for exploring the data live.",
+    points: [
+      "Transformed and cleaned raw streaming data with Power Query",
+      "Built slicers for genre, artist, and trend-based filtering",
+    ],
+  },
+];
+
+const experience = [
+  {
+    role: "Cyber Security Intern",
+    org: "IBM",
+    date: "Mar 2026 – May 2026",
+    points: [
+      "Worked with Kali Linux for command-line operations, file management, and system navigation",
+      "Ran network scanning and information gathering with Nmap, WHOIS, and Wireshark to identify hosts and vulnerabilities",
+      "Applied cryptography, hashing, and encryption concepts to secure data",
+      "Conducted vulnerability scanning and basic exploitation using Nmap and Metasploit; explored bug bounty methodology",
+    ],
+  },
+  {
+    role: "Software Testing Intern",
+    org: "CODTECH IT Solutions",
+    date: "Feb 2026 – Mar 2026",
+    points: [
+      "Automated test scripts with Selenium WebDriver (Python) to validate login and navigation flows",
+      "Performed REST API testing in Postman — GET/POST requests, status codes, auth, JSON validation",
+      "Ran security tests for XSS by injecting payloads and analyzing app behaviour",
+      "Load-tested with Gatling to measure response time and throughput under simulated traffic",
+    ],
+  },
+];
+
+const certifications = [
+  { name: "Microsoft Azure Fundamentals (AZ-900)", org: "Microsoft", year: "2025" },
+  { name: "Cyber Security & Ethical Hacking Workshop", org: "NCIIPC, Govt. of India", year: "2024" },
+  { name: "Claude API Course — Prompt Engineering, MCP, RAG", org: "Anthropic", year: "2026" },
+];
+
+/* ---------------------------------------------------------
+   Terminal typing hero
+--------------------------------------------------------- */
+function TerminalHero() {
+  const lines = [
+    { cmd: "whoami", out: "Ruchitha_r —  BCA, St. Paul's College" },
+    { cmd: "scan --target=career --mode=deep", out: "2 domains detected: AI/ML systems, cybersecurity" },
+    { cmd: "status", out: "open to full-time roles · Bengaluru" },
+  ];
+  const [lineIdx, setLineIdx] = useState(0);
+  const [charIdx, setCharIdx] = useState(0);
+  const [phase, setPhase] = useState("cmd"); // cmd -> out -> done
+  const [history, setHistory] = useState([]);
+  const reduced = useRef(
+    typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+
+  useEffect(() => {
+    if (reduced.current) {
+      setHistory(lines);
+      setPhase("done");
+      return;
+    }
+    if (lineIdx >= lines.length) {
+      setPhase("done");
+      return;
+    }
+    const current = lines[lineIdx];
+    const target = phase === "cmd" ? current.cmd : current.out;
+
+    if (charIdx <= target.length) {
+      const t = setTimeout(() => setCharIdx((c) => c + 1), phase === "cmd" ? 38 : 14);
+      return () => clearTimeout(t);
+    } else {
+      if (phase === "cmd") {
+        const t = setTimeout(() => {
+          setPhase("out");
+          setCharIdx(0);
+        }, 260);
+        return () => clearTimeout(t);
+      } else {
+        const t = setTimeout(() => {
+          setHistory((h) => [...h, current]);
+          setLineIdx((i) => i + 1);
+          setPhase("cmd");
+          setCharIdx(0);
+        }, 420);
+        return () => clearTimeout(t);
+      }
+    }
+  }, [charIdx, phase, lineIdx]);
+
+  const current = lines[lineIdx];
+
+  return (
+    <div className="term">
+      <div className="term-bar">
+        <span className="term-dot" style={{ background: "#FF6B5E" }} />
+        <span className="term-dot" style={{ background: "#FFC15E" }} />
+        <span className="term-dot" style={{ background: "#4FE3C1" }} />
+        <span className="term-path">ruchitha@career:~</span>
+      </div>
+      <div className="term-body">
+        {history.map((l, i) => (
+          <div key={i} className="term-line">
+            <div className="term-row">
+              <span className="term-prompt">$</span>
+              <span className="term-cmd">{l.cmd}</span>
+            </div>
+            <div className="term-out">{l.out}</div>
+          </div>
+        ))}
+        {current && phase !== "done" && (
+          <div className="term-line">
+            <div className="term-row">
+              <span className="term-prompt">$</span>
+              <span className="term-cmd">
+                {phase === "cmd" ? current.cmd.slice(0, charIdx) : current.cmd}
+              </span>
+              {phase === "cmd" && <span className="term-caret" />}
+            </div>
+            {phase === "out" && (
+              <div className="term-out">
+                {current.out.slice(0, charIdx)}
+                <span className="term-caret" />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------
+   Radar sweep decoration (signature element)
+--------------------------------------------------------- */
+function RadarMark() {
+  return (
+    <svg className="radar-svg" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="90" className="radar-ring" />
+      <circle cx="100" cy="100" r="62" className="radar-ring" />
+      <circle cx="100" cy="100" r="34" className="radar-ring" />
+      <line x1="100" y1="10" x2="100" y2="190" className="radar-ring" />
+      <line x1="10" y1="100" x2="190" y2="100" className="radar-ring" />
+      <g className="radar-sweep">
+        <path d="M100,100 L100,10 A90,90 0 0,1 163.6,36.4 Z" fill="url(#sweepGrad)" />
+      </g>
+      <defs>
+        <linearGradient id="sweepGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#4FE3C1" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="#4FE3C1" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <circle cx="100" cy="100" r="3.5" fill="#4FE3C1" />
+    </svg>
+  );
+}
+
+/* ---------------------------------------------------------
+   Section shell
+--------------------------------------------------------- */
+function Section({ id, eyebrow, title, children, className = "" }) {
+  return (
+    <section id={id} className={`section ${className}`}>
+      <div className="section-head">
+        <span className="eyebrow">
+          <span className="eyebrow-dot" />
+          {eyebrow}
+        </span>
+        <h2 className="section-title">{title}</h2>
+      </div>
+      {children}
+    </section>
+  );
+}
+
+export default function Portfolio() {
+  const [active, setActive] = useState("home");
+
+  useEffect(() => {
+    const ids = ["home", "about", "skills", "projects", "experience", "certifications", "contact"];
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -50% 0px" }
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+    return () => obs.disconnect();
+  }, []);
+
+  const nav = [
+    { id: "home", label: "home" },
+    { id: "about", label: "about" },
+    { id: "skills", label: "skills" },
+    { id: "projects", label: "projects" },
+    { id: "experience", label: "experience" },
+    { id: "certifications", label: "certs" },
+    { id: "contact", label: "contact" },
+  ];
+
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <div className="page">
+      <style>{`
+        :root {
+          --ink: #0B0F14;
+          --surface: #121820;
+          --surface-2: #161E27;
+          --line: #202B36;
+          --text: #E7EDF2;
+          --muted: #7C8AA0;
+          --scan: #4FE3C1;
+          --pulse: #8A7CFF;
+          --alert: #FF6B5E;
+        }
+        * { box-sizing: border-box; }
+        .page {
+          background: var(--ink);
+          color: var(--text);
+          font-family: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+          min-height: 100vh;
+          position: relative;
+          overflow-x: hidden;
+        }
+        .page::before {
+          content: "";
+          position: fixed;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(79,227,193,0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(79,227,193,0.035) 1px, transparent 1px);
+          background-size: 42px 42px;
+          pointer-events: none;
+          z-index: 0;
+        }
+        a { color: inherit; }
+        .mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+
+        /* NAV */
+        .navbar {
+          position: sticky; top: 0; z-index: 20;
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 18px clamp(20px, 6vw, 64px);
+          background: rgba(11,15,20,0.85);
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid var(--line);
+        }
+        .brand { display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 15px; letter-spacing: 0.02em; }
+        .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--scan); box-shadow: 0 0 8px var(--scan); }
+        .navlinks { display: flex; gap: 28px; }
+        .navlinks button {
+          background: none; border: none; color: var(--muted); font-family: 'JetBrains Mono', monospace;
+          font-size: 13px; cursor: pointer; padding: 4px 0; position: relative; transition: color 0.2s;
+        }
+        .navlinks button:hover, .navlinks button.active { color: var(--scan); }
+        .navlinks button.active::after {
+          content: ""; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px; background: var(--scan);
+        }
+        .navlinks button:focus-visible, button:focus-visible, a:focus-visible {
+          outline: 2px solid var(--scan); outline-offset: 3px; border-radius: 3px;
+        }
+        @media (max-width: 720px) { .navlinks { display: none; } }
+
+        /* HERO */
+        .hero {
+          position: relative; z-index: 1;
+          display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px;
+          align-items: center;
+          padding: clamp(48px, 8vw, 96px) clamp(20px, 6vw, 64px) 72px;
+          max-width: 1280px; margin: 0 auto;
+        }
+        @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+        .hero-eyebrow {
+          font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--scan);
+          letter-spacing: 0.12em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 18px;
+        }
+        .hero h1 {
+          font-size: clamp(34px, 5.2vw, 58px); line-height: 1.05; margin: 0 0 18px;
+          font-weight: 700; letter-spacing: -0.01em;
+        }
+        .hero h1 .accent { color: var(--scan); }
+        .hero p.lede { color: var(--muted); font-size: 17px; line-height: 1.6; max-width: 520px; margin: 0 0 30px; }
+        .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+        .btn {
+          display: inline-flex; align-items: center; gap: 8px;
+          padding: 12px 22px; border-radius: 6px; font-size: 14px; font-weight: 600;
+          text-decoration: none; cursor: pointer; border: 1px solid transparent;
+          font-family: 'JetBrains Mono', monospace; transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .btn-primary { background: var(--scan); color: #06110D; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,227,193,0.25); }
+        .btn-ghost { border-color: var(--line); color: var(--text); background: transparent; }
+        .btn-ghost:hover { border-color: var(--scan); color: var(--scan); }
+
+        .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+        .radar-svg { width: min(320px, 80%); opacity: 0.9; }
+        .radar-ring { fill: none; stroke: rgba(79,227,193,0.22); stroke-width: 1; }
+        .radar-sweep { transform-origin: 100px 100px; animation: sweep 4s linear infinite; }
+        @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) { .radar-sweep { animation: none; } }
+
+        /* TERMINAL */
+        .term {
+          background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+          overflow: hidden; box-shadow: 0 30px 60px -30px rgba(0,0,0,0.6);
+          max-width: 560px; margin-top: 8px;
+        }
+        .term-bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+        .term-dot { width: 10px; height: 10px; border-radius: 50%; opacity: 0.9; }
+        .term-path { margin-left: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+        .term-body { padding: 18px 18px 22px; min-height: 150px; font-family: 'JetBrains Mono', monospace; font-size: 13.5px; }
+        .term-line { margin-bottom: 12px; }
+        .term-row { display: flex; gap: 8px; }
+        .term-prompt { color: var(--scan); }
+        .term-cmd { color: var(--text); }
+        .term-out { color: var(--muted); margin-top: 4px; padding-left: 18px; }
+        .term-caret { display: inline-block; width: 7px; height: 14px; background: var(--scan); margin-left: 2px; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* SECTIONS */
+        .section { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 64px clamp(20px, 6vw, 64px); }
+        .section-head { margin-bottom: 36px; }
+        .eyebrow { display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--scan); letter-spacing: 0.12em; text-transform: uppercase; }
+        .eyebrow-dot { width: 6px; height: 6px; background: var(--scan); border-radius: 50%; }
+        .section-title { font-size: clamp(24px, 3vw, 32px); margin: 10px 0 0; font-weight: 700; }
+
+        /* ABOUT */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        @media (max-width: 800px) { .about-grid { grid-template-columns: 1fr; } }
+        .about-text { color: var(--muted); font-size: 15.5px; line-height: 1.75; }
+        .about-text strong { color: var(--text); }
+        .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; }
+        .stat { border: 1px solid var(--line); border-radius: 8px; padding: 16px; background: var(--surface); }
+        .stat b { display: block; font-size: 22px; color: var(--scan); font-family: 'JetBrains Mono', monospace; }
+        .stat span { color: var(--muted); font-size: 12.5px; }
+
+        /* SKILLS */
+        .skills-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        @media (max-width: 900px) { .skills-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 520px) { .skills-grid { grid-template-columns: 1fr; } }
+        .skill-card { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 20px; transition: border-color 0.2s, transform 0.2s; }
+        .skill-card:hover { border-color: var(--scan); transform: translateY(-3px); }
+        .skill-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; color: var(--scan); }
+        .skill-head span { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .skill-tag { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; font-family: 'JetBrains Mono', monospace; }
+
+        /* PROJECTS */
+        .project-card {
+          border: 1px solid var(--line); background: var(--surface); border-radius: 12px;
+          padding: 28px; margin-bottom: 20px; position: relative; overflow: hidden;
+        }
+        .project-card::before {
+          content: ""; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--scan); opacity: 0.6;
+        }
+        .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--pulse); letter-spacing: 0.1em; }
+        .project-card h3 { font-size: 22px; margin: 8px 0 2px; }
+        .project-card .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 14px; }
+        .project-card p.desc { color: var(--muted); line-height: 1.65; font-size: 14.5px; margin-bottom: 14px; max-width: 720px; }
+        .project-points { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 8px; }
+        .project-points li { display: flex; gap: 8px; color: var(--text); font-size: 13.5px; }
+        .project-points svg { flex-shrink: 0; margin-top: 2px; color: var(--scan); }
+        .stack-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .stack-chip { font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--scan); border: 1px solid rgba(79,227,193,0.3); background: rgba(79,227,193,0.06); border-radius: 4px; padding: 3px 9px; }
+
+        /* EXPERIENCE — case-file timeline */
+        .exp-item { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding: 24px 0; border-top: 1px solid var(--line); }
+        .exp-item:first-child { border-top: none; }
+        @media (max-width: 700px) { .exp-item { grid-template-columns: 1fr; gap: 8px; } }
+        .exp-date { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--pulse); }
+        .exp-role { font-size: 18px; font-weight: 700; margin: 0; }
+        .exp-org { color: var(--scan); font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 10px; }
+        .exp-points { list-style: none; padding: 0; margin: 0; display: grid; gap: 7px; }
+        .exp-points li { color: var(--muted); font-size: 14px; line-height: 1.6; display: flex; gap: 8px; }
+        .exp-points li::before { content: "›"; color: var(--scan); font-weight: 700; }
+
+        /* CERTIFICATIONS */
+        .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        @media (max-width: 800px) { .cert-grid { grid-template-columns: 1fr; } }
+        .cert-card { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 18px; display: flex; gap: 12px; align-items: flex-start; }
+        .cert-card svg { color: var(--scan); flex-shrink: 0; margin-top: 2px; }
+        .cert-card h4 { margin: 0 0 4px; font-size: 14.5px; line-height: 1.35; }
+        .cert-card p { margin: 0; color: var(--muted); font-size: 12.5px; font-family: 'JetBrains Mono', monospace; }
+
+        /* CONTACT */
+        .contact-wrap { text-align: center; padding-bottom: 100px; }
+        .contact-wrap .section-head { margin-bottom: 16px; display: flex; flex-direction: column; align-items: center; }
+        .contact-wrap p.lede { color: var(--muted); max-width: 480px; margin: 0 auto 32px; }
+        .contact-links { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+        .contact-chip {
+          display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 8px;
+          padding: 12px 18px; font-family: 'JetBrains Mono', monospace; font-size: 13px; text-decoration: none;
+          color: var(--text); transition: border-color 0.2s, color 0.2s;
+        }
+        .contact-chip:hover { border-color: var(--scan); color: var(--scan); }
+
+        footer { text-align: center; padding: 24px; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 12px; border-top: 1px solid var(--line); position: relative; z-index: 1; }
+      `}</style>
+
+      {/* NAV */}
+      <nav className="navbar">
+        <div className="brand">
+          <span className="brand-dot" />
+          ruchitha.r
+        </div>
+        <div className="navlinks">
+          {nav.map((n) => (
+            <button
+              key={n.id}
+              className={active === n.id ? "active" : ""}
+              onClick={() => scrollTo(n.id)}
+            >
+              {n.label}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <div id="home" className="hero">
+        <div>
+          <div className="hero-eyebrow">
+            <Radar size={14} /> scanning targets: AI/ML · cybersecurity
+          </div>
+          <h1>
+            Building systems that <span className="accent">retrieve smart</span> and{" "}
+            <span className="accent">defend well</span>.
+          </h1>
+          <p className="lede">
+            Final-year BCA student at St. Paul's College, Bengaluru. I build
+            RAG-based AI tools and test systems for the gaps attackers look for —
+            two disciplines that, done right, ask the same question: what can go wrong here?
+          </p>
+          <div className="hero-ctas">
+            <button className="btn btn-primary" onClick={() => scrollTo("projects")}>
+              View projects <ChevronRight size={16} />
+            </button>
+            <button className="btn btn-ghost" onClick={() => scrollTo("contact")}>
+              Get in touch
+            </button>
+          </div>
+        </div>
+        <div className="hero-visual">
+          <RadarMark />
+        </div>
+      </div>
+
+      <div className="section" style={{ paddingTop: 0 }}>
+        <TerminalHero />
+      </div>
+
+      {/* ABOUT */}
+      <Section id="about" eyebrow="01 · about" title="Who's on the other end of this scan">
+        <div className="about-grid">
+          <div className="about-text">
+            <p>
+              I'm <strong>Ruchitha</strong> — a final-year BCA student who ended up
+              splitting time between two fields that don't usually share a
+              portfolio: <strong>AI/ML development</strong> and{" "}
+              <strong>cybersecurity</strong>.
+            </p>
+            <p>
+              My flagship project, <strong>Veriscope</strong>, is a RAG-based
+              research platform I built to fact-check and analyze documents in
+              real time. Alongside that, I've spent internships inside both
+              worlds — scanning networks and hunting vulnerabilities at IBM,
+              then stress-testing applications at CODTECH.
+            </p>
+            <p>
+              I like the overlap: a good RAG pipeline and a good penetration
+              test both come down to knowing exactly where the trust boundary
+              is, and checking it anyway.
+            </p>
+          </div>
+          <div className="stat-row">
+            <div className="stat"><b>7.9</b><span>CGPA · BCA</span></div>
+            <div className="stat"><b>2</b><span>Internships completed</span></div>
+            <div className="stat"><b>6</b><span>Tools shipped in Veriscope</span></div>
+            <div className="stat"><b>3</b><span>Certifications earned</span></div>
+          </div>
+        </div>
+      </Section>
+
+      {/* SKILLS */}
+      <Section id="skills" eyebrow="02 · scan results" title="Stack, categorized like a recon report">
+        <div className="skills-grid">
+          {skillGroups.map((g) => (
+            <div className="skill-card" key={g.label}>
+              <div className="skill-head">
+                <g.icon size={18} />
+                <span>{g.label}</span>
+              </div>
+              <div className="skill-tags">
+                {g.items.map((i) => (
+                  <span className="skill-tag" key={i}>{i}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* PROJECTS */}
+      <Section id="projects" eyebrow="03 · case files" title="Projects worth opening">
+        {projects.map((p) => (
+          <div className="project-card" key={p.id}>
+            <span className="project-tag">{p.tag}</span>
+            <h3>{p.title}</h3>
+            <div className="subtitle">{p.subtitle}</div>
+            <p className="desc">{p.desc}</p>
+            <ul className="project-points">
+              {p.points.map((pt) => (
+                <li key={pt}>
+                  <Search size={14} />
+                  {pt}
+                </li>
+              ))}
+            </ul>
+            <div className="stack-row">
+              {p.stack.map((s) => (
+                <span className="stack-chip" key={s}>{s}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </Section>
+
+      {/* EXPERIENCE */}
+      <Section id="experience" eyebrow="04 · timeline" title="Where I've worked">
+        {experience.map((e) => (
+          <div className="exp-item" key={e.role}>
+            <div className="exp-date mono">{e.date}</div>
+            <div>
+              <h3 className="exp-role">{e.role}</h3>
+              <div className="exp-org">{e.org}</div>
+              <ul className="exp-points">
+                {e.points.map((pt) => (
+                  <li key={pt}>{pt}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </Section>
+
+      {/* CERTIFICATIONS */}
+      <Section id="certifications" eyebrow="05 · verified" title="Certifications">
+        <div className="cert-grid">
+          {certifications.map((c) => (
+            <div className="cert-card" key={c.name}>
+              <Lock size={18} />
+              <div>
+                <h4>{c.name}</h4>
+                <p>{c.org} · {c.year}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* CONTACT */}
+      <Section id="contact" eyebrow="06 · connect" title="" className="contact-wrap">
+        <h2 className="section-title" style={{ marginBottom: 8 }}>Open to full-time roles in Bengaluru</h2>
+        <p className="lede">
+          Looking for AI/ML or cybersecurity-aligned roles where I can keep
+          building at the intersection of both. Reach out — I reply fast.
+        </p>
+        <div className="contact-links">
+          <a className="contact-chip" href="mailto:ruchitharuc@gmail.com">
+            <Mail size={15} /> ruchitharuc@gmail.com
+          </a>
+          <a className="contact-chip" href="tel:+919480957145">
+            <Phone size={15} /> +91 94809 57145
+          </a>
+          <a className="contact-chip" href="https://www.linkedin.com/in/ruchitharr" target="_blank" rel="noreferrer">
+            <Linkedin size={15} /> linkedin.com/in/ruchitharr
+          </a>
+          <a className="contact-chip" href="https://github.com/rruchitha460-sys" target="_blank" rel="noreferrer">
+            <Github size={15} /> github.com/rruchitha460-sys
+          </a>
+          <span className="contact-chip" style={{ cursor: "default" }}>
+            <MapPin size={15} /> Bengaluru, KA
+          </span>
+        </div>
+      </Section>
+
+      <footer>
+        <span className="mono">$ end_of_scan — thanks for reading, Ruchitha R © 2026</span>
+      </footer>
+    </div>
+  );
+}
