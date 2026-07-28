@@ -72,6 +72,21 @@ const projects = [
     ],
   },
   {
+    id: "job-searcher",
+    tag: "AGENTIC AI",
+    title: "AI Job Searcher Agent",
+    subtitle: "Autonomous job discovery & matching agent",
+    demo: "https://rruchitha460-sys-ai-job-search-agent-app-6himkr.streamlit.app/",
+    stack: ["Python", "LangChain", "FAISS", "SQLite", "Streamlit", "OpenRouter", "APScheduler"],
+    desc:
+      "An end-to-end AI agent that autonomously fetches job postings from Adzuna, Greenhouse, and Lever, then semantically matches them against a resume using sentence embeddings and FAISS vector search, with an LLM layer explaining each match and suggesting resume improvements.",
+    points: [
+      "Filters out seniority-mismatched roles through NLP pattern matching before they reach the results",
+      "Built the matching pipeline end-to-end — sentence embeddings, FAISS indexing, and LLM-generated explanations",
+      "Runs daily on APScheduler with zero manual input, deployed live via Streamlit Cloud + GitHub CI/CD",
+    ],
+  },
+  {
     id: "spotify",
     tag: "DATA ANALYTICS",
     title: "Spotify Streaming Dashboard",
