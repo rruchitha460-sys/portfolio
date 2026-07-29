@@ -76,7 +76,7 @@ const projects = [
     tag: "AGENTIC AI",
     title: "AI Job Searcher Agent",
     subtitle: "Autonomous job discovery & matching agent",
-    demo: "https://rruchitha460-sys-ai-job-search-agent-app-6himkr.streamlit.app/",
+    demo: "https://ai-job-search-agent-project.streamlit.app/",
     stack: ["Python", "LangChain", "FAISS", "SQLite", "Streamlit", "OpenRouter", "APScheduler"],
     desc:
       "An end-to-end AI agent that autonomously fetches job postings from Adzuna, Greenhouse, and Lever, then semantically matches them against a resume using sentence embeddings and FAISS vector search, with an LLM layer explaining each match and suggesting resume improvements.",
