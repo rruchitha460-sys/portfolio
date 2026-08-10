@@ -79,10 +79,10 @@ const projects = [
     demo: "https://ai-job-search-agent-project.streamlit.app/",
     stack: ["Python", "LangChain", "FAISS", "SQLite", "Streamlit", "OpenRouter", "APScheduler"],
     desc:
-      "An end-to-end AI agent that autonomously fetches job postings from Adzuna, Greenhouse, and Lever, then semantically matches them against a resume using sentence embeddings and FAISS vector search, with an LLM layer explaining each match and suggesting resume improvements.",
+      "An end-to-end multi-agent system, orchestrated with LangGraph, that autonomously fetches job postings from Adzuna, Greenhouse, and Lever, then semantically matches them against a resume using sentence embeddings and FAISS vector search — with a dedicated LLM agent explaining each match and suggesting resume improvements..",
     points: [
       "Filters out seniority-mismatched roles through NLP pattern matching before they reach the results",
-      "Built the matching pipeline end-to-end — sentence embeddings, FAISS indexing, and LLM-generated explanations",
+      "Built the multi-agent pipeline end-to-end — sourcing, filtering, matching, and explanation stages orchestrated with LangGraph",
       "Runs daily on APScheduler with zero manual input, deployed live via Streamlit Cloud + GitHub CI/CD",
     ],
   },
