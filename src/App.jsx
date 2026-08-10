@@ -77,7 +77,7 @@ const projects = [
     title: "AI Job Searcher Agent",
     subtitle: "Autonomous job discovery & matching agent",
     demo: "https://ai-job-search-agent-project.streamlit.app/",
-    stack: ["Python", "LangChain", "FAISS", "SQLite", "Streamlit", "OpenRouter", "APScheduler"],
+    stack: ["Python", "LangChain", "Langgraph" , "FAISS", "SQLite", "Streamlit", "OpenRouter", "APScheduler"],
     desc:
       "An end-to-end multi-agent system, orchestrated with LangGraph, that autonomously fetches job postings from Adzuna, Greenhouse, and Lever, then semantically matches them against a resume using sentence embeddings and FAISS vector search — with a dedicated LLM agent explaining each match and suggesting resume improvements..",
     points: [
