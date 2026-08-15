@@ -83,7 +83,7 @@ const projects = [
     points: [
       "Filters out seniority-mismatched roles through NLP pattern matching before they reach the results",
       "Built the multi-agent pipeline end-to-end — sourcing, filtering, matching, and explanation stages orchestrated with LangGraph",
-      "Added an LLMOps layer — every run is logged to a database with per-source breakdown and error tracking, visualized in a live monitoring dashboard, and validated through CI smoke tests on every push",
+      "Added an LLMOps layer — run logging, a monitoring dashboard, and CI smoke tests for pipeline reliability",
       "Runs daily on APScheduler with zero manual input, deployed live via Streamlit Cloud + GitHub CI/CD",
     ],
   },
