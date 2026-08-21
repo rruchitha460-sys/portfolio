@@ -97,10 +97,12 @@ const projects = [
   desc:
     "A reusable guardrails framework with input and output safety checks — PII detection, prompt injection, toxicity filtering, and hallucination detection — pluggable into any LLM application, backed by an evaluation harness that measures precision and recall instead of just claiming the checks work.",
   points: [
-    "Built six pluggable guardrail checks (PII, prompt injection, toxicity, format validation, hallucination detection) around a single reusable pipeline orchestrator",
-    "Designed an evaluation harness with labeled test cases scoring precision, recall, and false-positive rate — currently at 100% accuracy on the test suite",
-    "Wired the pipeline into a live RAG-style demo chatbot with MongoDB logging, showing each guardrail check pass/fail in real time",
-    "Deployed full stack — FastAPI backend on Render, static frontend on Vercel — with sub-millisecond guardrail check latency",
+    points: [
+  "Six pluggable guardrail checks (PII, injection, toxicity, format, hallucination) around one reusable pipeline",
+  "Evaluation harness scoring precision, recall, and false-positive rate — 100% accuracy on the test suite",
+  "Live RAG demo chatbot with MongoDB logging, showing each guardrail pass/fail in real time",
+  "Deployed full stack — FastAPI on Render, static frontend on Vercel — sub-millisecond check latency",
+],
   ],
 },
   {
